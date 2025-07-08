@@ -1,5 +1,6 @@
 import transformers
 import torch
+import json
 from transformers import BitsAndBytesConfig
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
@@ -49,7 +50,13 @@ class CustomLlama2_7B(DeepEvalBaseLLM):
             pad_token_id=self.tokenizer.eos_token_id,
         )
 
-        return pipeline(prompt)
+        result = pipeline(prompt)
+
+        # post-process to match your desired format
+        formatted = [{"input": r["generated_text"]} for r in result]
+
+        # Convert the whole result to a JSON string
+        return json.dumps({"data": formatted}, ensure_ascii=False, indent=2)
 
     async def a_generate(self, prompt: str, schema = None) -> str:
         return self.generate(prompt)
