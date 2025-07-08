@@ -32,7 +32,7 @@ class CustomLlama2_7B(DeepEvalBaseLLM):
     def load_model(self):
         return self.model
 
-    def generate(self, prompt: str) -> str:
+    def generate(self, prompt: str, schema = None) -> str:
         model = self.load_model()
 
         pipeline = transformers.pipeline(
@@ -51,7 +51,7 @@ class CustomLlama2_7B(DeepEvalBaseLLM):
 
         return pipeline(prompt)
 
-    async def a_generate(self, prompt: str) -> str:
+    async def a_generate(self, prompt: str, schema = None) -> str:
         return self.generate(prompt)
 
     def get_model_name(self):
